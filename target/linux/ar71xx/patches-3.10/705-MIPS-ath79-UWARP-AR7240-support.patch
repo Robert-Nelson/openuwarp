@@ -1,0 +1,71 @@
+--- a/arch/mips/ath79/Kconfig	2014-03-19 11:52:34.000000000 -0400
++++ b/arch/mips/ath79/Kconfig	2014-03-19 11:53:36.000000000 -0400
+@@ -890,6 +890,38 @@
+ 	select ATH79_DEV_USB
+ 	select ATH79_DEV_WMAC
+ 
++config ATH79_MACH_UWARP_AR7420
++	bool "PIKA uWARP AR7420 support"
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_SPI
++	select ATH79_DEV_USB
++	select ATH79_DEV_ETH
++	select SOC_AR724X
++	default y
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  PIKA Technologies uWARP Atheros AR7420 boards.
++
++#
++# Select the amount of memory on the UWARP
++#
++choice
++	prompt "PIKA uWARP Memory selection"
++	help
++	  Select the amount of memory on your PIKA uWARP AR7420 8MB board
++
++config ATH79_MACH_UWARP_SPI_8M
++	bool "PIKA uWARP AR7420 8MB board"
++	depends on ATH79_MACH_UWARP_AR7420
++
++config ATH79_MACH_UWARP_SPI_16M
++	bool "PIKA uWARP AR7420 16MB board"
++	depends on ATH79_MACH_UWARP_AR7420
++
++endchoice
++
+ endmenu
+ 
+ config SOC_AR71XX
+--- a/arch/mips/ath79/machtypes.h	2014-03-19 11:52:34.000000000 -0400
++++ b/arch/mips/ath79/machtypes.h	2014-03-19 11:57:31.000000000 -0400
+@@ -136,6 +136,7 @@
+ 	ATH79_MACH_UBNT_UNIFI, 		/* Ubiquiti Unifi */
+ 	ATH79_MACH_UBNT_UNIFI_OUTDOOR,	/* Ubiquiti UnifiAP Outdoor */
+ 	ATH79_MACH_UBNT_XM,		/* Ubiquiti Networks XM board rev 1.0 */
++	ATH79_MACH_UWARP_AR7420,		/* PIKA Technologies uWARP */
+ 	ATH79_MACH_WHR_G301N,		/* Buffalo WHR-G301N */
+ 	ATH79_MACH_WHR_HP_G300N,	/* Buffalo WHR-HP-G300N */
+ 	ATH79_MACH_WHR_HP_GN,		/* Buffalo WHR-HP-GN */
+--- a/arch/mips/ath79/Makefile	2014-03-19 11:52:34.000000000 -0400
++++ b/arch/mips/ath79/Makefile	2014-03-19 12:00:21.000000000 -0400
+@@ -108,6 +108,7 @@
+ obj-$(CONFIG_ATH79_MACH_TL_WR720N_V3)	+= mach-tl-wr720n-v3.o
+ obj-$(CONFIG_ATH79_MACH_UBNT)		+= mach-ubnt.o
+ obj-$(CONFIG_ATH79_MACH_UBNT_XM)	+= mach-ubnt-xm.o
++obj-$(ATH79_MACH_UWARP_AR7420)	        += mach-uwarp-ar7240.c
+ obj-$(CONFIG_ATH79_MACH_WHR_HP_G300N)	+= mach-whr-hp-g300n.o
+ obj-$(CONFIG_ATH79_MACH_WLAE_AG300N)	+= mach-wlae-ag300n.o
+ obj-$(CONFIG_ATH79_MACH_WLR8100)	+= mach-wlr8100.o
+--- a/arch/mips/ath79/prom.c	2014-03-19 11:52:34.000000000 -0400
++++ b/arch/mips/ath79/prom.c	2014-03-19 12:03:59.000000000 -0400
+@@ -183,6 +183,7 @@
+ 
+ 	if (strstr(arcs_cmdline, "board=750Gr3") ||
+ 	    strstr(arcs_cmdline, "board=951G") ||
++	    strstr(arcs_cmdline, "board=UWARP-AR7420") ||
+ 	    strstr(arcs_cmdline, "board=2011L"))
+ 		ath79_prom_append_cmdline("console", "ttyS0,115200");
+ }

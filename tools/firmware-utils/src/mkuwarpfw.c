@@ -183,7 +183,6 @@ static struct board_info *find_board_by_hwid(uint32_t hw_id)
 static void usage(int status)
 {
 	FILE *stream = (status != EXIT_SUCCESS) ? stderr : stdout;
-	struct board_info *board;
 
 	fprintf(stream, "Usage: %s [OPTIONS...]\n", progname);
 	fprintf(stream,
@@ -211,10 +210,10 @@ static void usage(int status)
 static int get_md5(char *data, int size, char *md5)
 {
 	MD5_CTX ctx;
-
 	MD5_Init(&ctx);
 	MD5_Update(&ctx, data, size);
 	MD5_Final(md5, &ctx);
+	return 0;
 }
 
 static int get_file_stat(struct file_info *fdata)
@@ -662,9 +661,6 @@ static int inspect_fw(void)
 int main(int argc, char *argv[])
 {
 	int ret = EXIT_FAILURE;
-	int err;
-
-	FILE *outfile;
 
 	progname = basename(argv[0]);
 

@@ -66,6 +66,7 @@ define Host/Compile
 	$(call cc,mkporayfw, -Wall)
 	#$(call cc,mkhilinkfw, -lcrypto)
 	$(call cc,mkdcs932, -Wall)
+	$(call cc,mkuwarpfw md5, -Wall)
 endef
 
 define Host/Install

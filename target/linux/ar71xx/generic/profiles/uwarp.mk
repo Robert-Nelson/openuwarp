@@ -6,7 +6,7 @@
 #
 
 define Profile/UWARP8MB
-	NAME:=uWARP with 8MB
+	NAME:=UWARP8MB
 	PACKAGES:=kmod-usb-core kmod-usb-ohci kmod-usb2 kmod-ledtrig-usbdev \
 	kmod-usb-storage kmod-fs-vfat kmod-nls-cp437 \
 	kmod-nls-iso8859-1 kmod-nls-utf8 kmod-ledtrig-netdev udev
@@ -23,7 +23,7 @@ endef
 $(eval $(call Profile,UWARP8MB))
 
 define Profile/UWARP16MB
-	NAME:=uWARP with 16MB
+	NAME:=UWARP16MB
 	PACKAGES:=kmod-usb-core kmod-usb-ohci kmod-usb2 kmod-ledtrig-usbdev \
 	kmod-usb-storage kmod-fs-vfat kmod-nls-cp437 \
 	kmod-nls-iso8859-1 kmod-nls-utf8 kmod-ledtrig-netdev udev 

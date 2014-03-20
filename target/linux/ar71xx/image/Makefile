@@ -868,6 +868,41 @@ define Image/Build/Zcomax
 	fi
 endef
 
+#######################################################################################
+
+define Image/Build/WARP
+	$(call PatchKernelGzip,$(2),$(3))
+	$(STAGING_DIR_HOST)/bin/mkuwarpfw \
+		-B $(4) -N PIKA -V $(REVISION) \
+		-k $(KDIR)/vmlinux-$(2).bin.gz \
+		-r $(BIN_DIR)/$(IMG_PREFIX)-root.$(1) \
+		-o $(call imgname,$(1),$(2))-factory.bin
+	$(STAGING_DIR_HOST)/bin/mkuwarpfw \
+		-B $(4) -N PIKA -V $(REVISION) -s \
+		-k $(KDIR)/vmlinux-$(2).bin.gz \
+		-r $(BIN_DIR)/$(IMG_PREFIX)-root.$(1) \
+		-o $(call imgname,$(1),$(2))-sysupgrade.bin
+
+endef
+
+define Image/Build/WARP/initramfs
+	$(call PatchKernelGzip,$(2),$(3))
+	$(STAGING_DIR_HOST)/bin/mkuwarpfw -c \
+		-B $(4) -N PIKA -V $(REVISION) -s \
+		-k $(KDIR)/vmlinux-$(2).bin.gz \
+		-o $(call imgname,$(1),$(2))-uImage.bin
+endef
+
+warpfw_cmdline=board=UWARP-AR7420 console=ttyS0,115200
+define Image/Build/Profile/UWARP8MB
+	$(call Image/Build/Template/initramfs/$(1),WARP,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420)
+endef
+
+define Image/Build/Profile/UWARP16MB
+	$(call Image/Build/Template/initramfs/$(1),WARP,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420_16M)
+endef
+
+###################################33
 
 define Jffs2Template
   define Image/Build/Template/$(1)/jffs2-$(2)
@@ -1069,6 +1104,9 @@ $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTROCKETM,ubnt-rocket-m,UBNT-RM,ttyS
 $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTNANOM,ubnt-nano-m,UBNT-NM,ttyS0,115200,XM,XM,ar7240))
 $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTUNIFI,ubnt-unifi,UBNT-UF,ttyS0,115200,XM,BZ,ar7240))
 $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTUNIFIOUTDOOR,ubnt-unifi-outdoor,UBNT-U20,ttyS0,115200,XM,BZ,ar7240))
+
+$(eval $(call SingleProfile,UWARP8MB,64kraw,WARP,uwarp-ar7420,UWARP-AR7420,ttyS0,115200))
+$(eval $(call SingleProfile,UWARP16MB,64kraw,WARP,uwarp-ar7420,UWARP-AR7420_16M,ttyS0,115200))
 
 $(eval $(call SingleProfile,WHRHPG300N,64kraw,WHRG301N,whr-g301n,WHR-G301N,ttyS0,115200,$$(whrhpg300n_mtdlayout),WHR-G301N))
 $(eval $(call SingleProfile,WHRHPG300N,64kraw,WHRHPG300N,whr-hp-g300n,WHR-HP-G300N,ttyS0,115200,$$(whrhpg300n_mtdlayout),WHR-HP-G300N))

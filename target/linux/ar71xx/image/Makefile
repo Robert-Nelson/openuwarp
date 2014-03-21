@@ -88,6 +88,13 @@ define PatchKernelGzip
 	gzip -9 -c $(KDIR_TMP)/vmlinux$(3)-$(1) > $(KDIR_TMP)/vmlinux$(3)-$(1).bin.gz
 endef
 
+define PatchKernelGzipWARP
+	cp $(KDIR)/vmlinux $(KDIR)/vmlinux-$(1)
+	$(STAGING_DIR_HOST)/bin/patch-cmdline $(KDIR)/vmlinux-$(1) '$(strip $(2))'
+	gzip -9 -c $(KDIR)/vmlinux-$(1) > $(KDIR)/vmlinux-$(1).bin.gz
+endef
+
+
 ifneq ($(SUBTARGET),mikrotik)
 define MkuImage
 	mkimage -A mips -O linux -T kernel -a 0x80060000 -C $(1) $(2) \
@@ -871,13 +878,13 @@ endef
 #######################################################################################
 
 define Image/Build/WARP
-	$(call PatchKernelGzip,$(2),$(3))
-	$(STAGING_DIR_HOST)/bin/mkuwarpfw \
+	$(call PatchKernelGzipWARP,$(2),$(3))
+	-$(STAGING_DIR_HOST)/bin/mkuwarpfw \
 		-B $(4) -N PIKA -V $(REVISION) \
 		-k $(KDIR)/vmlinux-$(2).bin.gz \
 		-r $(BIN_DIR)/$(IMG_PREFIX)-root.$(1) \
 		-o $(call imgname,$(1),$(2))-factory.bin
-	$(STAGING_DIR_HOST)/bin/mkuwarpfw \
+	-$(STAGING_DIR_HOST)/bin/mkuwarpfw \
 		-B $(4) -N PIKA -V $(REVISION) -s \
 		-k $(KDIR)/vmlinux-$(2).bin.gz \
 		-r $(BIN_DIR)/$(IMG_PREFIX)-root.$(1) \
@@ -886,8 +893,8 @@ define Image/Build/WARP
 endef
 
 define Image/Build/WARP/initramfs
-	$(call PatchKernelGzip,$(2),$(3))
-	$(STAGING_DIR_HOST)/bin/mkuwarpfw -c \
+	$(call PatchKernelGzipWARP,$(2),$(3))
+	-$(STAGING_DIR_HOST)/bin/mkuwarpfw -c \
 		-B $(4) -N PIKA -V $(REVISION) -s \
 		-k $(KDIR)/vmlinux-$(2).bin.gz \
 		-o $(call imgname,$(1),$(2))-uImage.bin
@@ -895,11 +902,13 @@ endef
 
 warpfw_cmdline=board=UWARP-AR7420 console=ttyS0,115200
 define Image/Build/Profile/UWARP8MB
-	$(call Image/Build/Template/initramfs/$(1),WARP,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420)
+	$(call Image/Build/WARP/initramfs,squashfs,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420)
+	$(call Image/Build/WARP,squashfs,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420)
 endef
 
 define Image/Build/Profile/UWARP16MB
-	$(call Image/Build/Template/initramfs/$(1),WARP,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420_16M)
+	$(call Image/Build/WARP/initramfs,squashfs,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420_16M)
+	$(call Image/Build/WARP,squashfs,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420_16M)
 endef
 
 ###################################33
@@ -1105,8 +1114,8 @@ $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTNANOM,ubnt-nano-m,UBNT-NM,ttyS0,11
 $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTUNIFI,ubnt-unifi,UBNT-UF,ttyS0,115200,XM,BZ,ar7240))
 $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTUNIFIOUTDOOR,ubnt-unifi-outdoor,UBNT-U20,ttyS0,115200,XM,BZ,ar7240))
 
-$(eval $(call SingleProfile,UWARP8MB,64kraw,WARP,uwarp-ar7420,UWARP-AR7420,ttyS0,115200))
-$(eval $(call SingleProfile,UWARP16MB,64kraw,WARP,uwarp-ar7420,UWARP-AR7420_16M,ttyS0,115200))
+#$(eval $(call SingleProfile,UWARP,64kraw,WARP8MB,uwarp-ar7420,UWARP-AR7420,ttyS0,115200,0x74200001,1,8M))
+#$(eval $(call SingleProfile,UWARP,64kraw,WARP16MB,uwarp-ar7420,UWARP-AR7420_16M,ttyS0,115200,0x74200001,1,16M))
 
 $(eval $(call SingleProfile,WHRHPG300N,64kraw,WHRG301N,whr-g301n,WHR-G301N,ttyS0,115200,$$(whrhpg300n_mtdlayout),WHR-G301N))
 $(eval $(call SingleProfile,WHRHPG300N,64kraw,WHRHPG300N,whr-hp-g300n,WHR-HP-G300N,ttyS0,115200,$$(whrhpg300n_mtdlayout),WHR-HP-G300N))

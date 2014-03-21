@@ -55,7 +55,7 @@
  obj-$(CONFIG_ATH79_MACH_TL_WR720N_V3)	+= mach-tl-wr720n-v3.o
  obj-$(CONFIG_ATH79_MACH_UBNT)		+= mach-ubnt.o
  obj-$(CONFIG_ATH79_MACH_UBNT_XM)	+= mach-ubnt-xm.o
-+obj-$(ATH79_MACH_UWARP_AR7420)	        += mach-uwarp-ar7240.c
++obj-$(CONFIG_ATH79_MACH_UWARP_AR7420)	+= mach-uwarp-ar7420.o
  obj-$(CONFIG_ATH79_MACH_WHR_HP_G300N)	+= mach-whr-hp-g300n.o
  obj-$(CONFIG_ATH79_MACH_WLAE_AG300N)	+= mach-wlae-ag300n.o
  obj-$(CONFIG_ATH79_MACH_WLR8100)	+= mach-wlr8100.o
@@ -68,4 +68,49 @@
 +	    strstr(arcs_cmdline, "board=UWARP-AR7420") ||
  	    strstr(arcs_cmdline, "board=2011L"))
  		ath79_prom_append_cmdline("console", "ttyS0,115200");
+ }
+--- a/arch/mips/ath79/dev-eth.c	2014-03-21 15:37:40.000000000 -0400
++++ b/arch/mips/ath79/dev-eth.c	2014-03-21 15:48:18.000000000 -0400
+@@ -1133,6 +1133,30 @@
+ 	dst[5] = t & 0xff;
+ }
+ 
++void __init uwarp_ath79_init_mac(unsigned char *dst, const unsigned char *src, unsigned int etherdevice)
++{
++	u32 t;
++
++	if (!is_valid_ether_addr(src)) {
++		memset(dst, '\0', ETH_ALEN);
++		return;
++	}
++
++	if (etherdevice > 1) {
++		memset(dst, '\0', ETH_ALEN);
++		return;
++	}
++
++	t = (((u32) src[3+(etherdevice*6)]) << 16) + (((u32) src[4+(etherdevice*6)]) << 8) + ((u32) src[5+(etherdevice*6)]);
++
++	dst[0] = src[0+(etherdevice*6)];
++	dst[1] = src[1+(etherdevice*6)];
++	dst[2] = src[2+(etherdevice*6)];
++	dst[3] = (t >> 16) & 0xff;
++	dst[4] = (t >> 8) & 0xff;
++	dst[5] = t & 0xff;
++}
++
+ void __init ath79_init_local_mac(unsigned char *dst, const unsigned char *src)
+ {
+ 	int i;
+--- a/arch/mips/ath79/dev-eth.h	2014-03-21 15:37:40.000000000 -0400
++++ b/arch/mips/ath79/dev-eth.h	2014-03-21 15:53:28.000000000 -0400
+@@ -20,6 +20,7 @@
+ void ath79_parse_ascii_mac(char *mac_str, u8 *mac);
+ void ath79_init_mac(unsigned char *dst, const unsigned char *src,
+ 		    int offset);
++void uwarp_ath79_init_mac(unsigned char *dst, const unsigned char *src, unsigned int etherdevice);
+ void ath79_init_local_mac(unsigned char *dst, const unsigned char *src);
+ 
+ struct ath79_eth_pll_data {
+	
  }

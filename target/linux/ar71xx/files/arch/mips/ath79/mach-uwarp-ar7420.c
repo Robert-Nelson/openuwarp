@@ -57,8 +57,8 @@ static struct mtd_partition uwarp_ar7420_partitions[] = {
 static struct flash_platform_data uwarp_ar7420_flash_data = { 
 	.parts      = uwarp_ar7420_partitions,
 	.nr_parts   = ARRAY_SIZE(uwarp_ar7420_partitions),
-};
-#elseif CONFIG_ATH79_MACH_UWARP_SPI_8M
+}; 
+#elif CONFIG_ATH79_MACH_UWARP_SPI_8M
 static struct mtd_partition uwarp_ar7420_partitions[] = {
 	{
 		.name       = "u-boot",
@@ -84,15 +84,12 @@ static struct mtd_partition uwarp_ar7420_partitions[] = {
 		.size       = 0x7c0000,
 	}
 };
-#else
-#error ***** WARNING ***** Neither CONFIG_ATH79_MACH_UWARP_SPI_8M or CONFIG_ATH79_MACH_UWARP_SPI_16M is defined ******
-#endif
-
-#ifdef CONFIG_ATH79_MACH_UWARP_SPI_16M || CONFIG_ATH79_MACH_UWARP_SPI_8M
 static struct flash_platform_data uwarp_ar7420_flash_data = { 
 	.parts      = uwarp_ar7420_partitions,
 	.nr_parts   = ARRAY_SIZE(uwarp_ar7420_partitions),
 };
+#else
+#error ***** WARNING ***** Neither CONFIG_ATH79_MACH_UWARP_SPI_8M or CONFIG_ATH79_MACH_UWARP_SPI_16M is defined ******
 #endif
 
 static struct gpio_led uwarp_ar7420_leds_gpio[] __initdata = {

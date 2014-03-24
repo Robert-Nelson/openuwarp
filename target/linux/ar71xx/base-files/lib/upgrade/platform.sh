@@ -69,6 +69,14 @@ tplink_get_image_boot_size() {
 	get_image "$@" | dd bs=4 count=1 skip=37 2>/dev/null | hexdump -v -n 4 -e '1/1 "%02x"'
 }
 
+uwarp_get_image_hwid() {
+	get_image "$@" | dd bs=4 count=1 skip=16 2>/dev/null | hexdump -v -n 4 -e '1/1 "%02x"'
+}
+
+uwarp_get_image_boot_size() {
+	get_image "$@" | dd bs=4 count=1 skip=37 2>/dev/null | hexdump -v -n 4 -e '1/1 "%02x"'
+}
+
 seama_get_type_magic() {
 	get_image "$@" | dd bs=1 count=4 skip=53 2>/dev/null | hexdump -v -n 4 -e '1/1 "%02x"'
 }
@@ -285,6 +293,30 @@ platform_check_image() {
 			echo "Invalid image type."
 			return 1
 		}
+		return 0
+		;;
+	uwarp-ar7420)
+		[ "$magic" != "0100" ] && {
+			echo "Invalid image type."
+			return 1
+		}
+
+		local hwid
+		local imageid
+
+		hwid=$(uwarp_get_hwid)
+		imageid=$(uwarp_get_image_hwid "$1")
+
+		echo "======================"
+		echo "hardware id = $hwid"
+		echo "image id    = $imageid"
+		echo "======================"
+		
+		[ "$hwid" != "$imageid" ] && {
+			echo "Invalid image, hardware ID mismatch, hw:$hwid image:$imageid."
+			return 1
+		}
+
 		return 0
 		;;
 	wndr3700 | \

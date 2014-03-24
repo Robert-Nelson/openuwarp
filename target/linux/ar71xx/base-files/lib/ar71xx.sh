@@ -62,6 +62,15 @@ cybertan_get_hw_magic() {
 	dd bs=8 count=1 skip=0 if=$part 2>/dev/null | hexdump -v -n 8 -e '1/1 "%02x"'
 }
 
+uwarp_get_hwid() {
+	local part
+
+	part=$(find_mtd_part firmware)
+	[ -z "$part" ] && return 1
+
+	dd if=$part bs=4 count=1 skip=16 2>/dev/null | hexdump -v -n 4 -e '1/1 "%02x"'
+}
+
 tplink_get_hwid() {
 	local part
 
@@ -638,6 +647,9 @@ ar71xx_board_detect() {
 		;;
 	*"BHU BXU2000n-2 rev. A1")
 		name="bxu2000n-2-a1"
+		;;
+	*UWARP-AR7420)
+		name="uwarp-ar7420"
 		;;
 	esac
 

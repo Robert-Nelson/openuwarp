@@ -33,7 +33,8 @@
 #endif
 
 #define HEADER_VERSION_V1	0x01000000
-#define HWID_UW_AR7420_V1	0x74200001
+#define HWID_UW_AR7420_V1	0x74200008
+#define HWID_UW_AR7420_V1_16M	0x74200010
 
 #define MD5SUM_LEN	16
 
@@ -119,7 +120,7 @@ static struct board_info boards[] = {
 	}, 
 	{
 		.id		= "UWARP-AR7420_16M",
-		.hw_id		= HWID_UW_AR7420_V1,
+		.hw_id		= HWID_UW_AR7420_V1_16M,
 		.hw_rev		= 1,
 		.fw_max_len	= 0xdc0000,
 		.kernel_la	= 0x80060000,

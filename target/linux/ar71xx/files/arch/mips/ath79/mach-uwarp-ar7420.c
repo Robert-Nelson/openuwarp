@@ -33,16 +33,16 @@ static struct mtd_partition uwarp_ar7420_partitions[] = {
 	{
 		.name       = "u-boot",
 		.offset     = 0,
-		.size       = 0x020000,
+		.size       = 0x030000,
 		.mask_flags = MTD_WRITEABLE,
 	}, {
 		.name       = "kernel",
-		.offset     = 0x020000,
+		.offset     = 0x030000,
 		.size       = 0x200000,
 	}, {
 		.name       = "rootfs",
-		.offset     = 0x220000,
-		.size       = 0xDC0000,
+		.offset     = 0x230000,
+		.size       = 0xDB0000,
 	}, {
 		.name       = "u-boot-env",
 		.offset     = 0xFF0000,
@@ -50,38 +50,39 @@ static struct mtd_partition uwarp_ar7420_partitions[] = {
 		.mask_flags = MTD_WRITEABLE,
 	}, {
 		.name       = "firmware",
-		.offset     = 0x020000,
-		.size       = 0xFC0000,
+		.offset     = 0x030000,
+		.size       = 0xFB0000,
 	}
 };
 static struct flash_platform_data uwarp_ar7420_flash_data = { 
 	.parts      = uwarp_ar7420_partitions,
 	.nr_parts   = ARRAY_SIZE(uwarp_ar7420_partitions),
 }; 
-#elif CONFIG_ATH79_MACH_UWARP_SPI_8M
+#else
+#ifdef CONFIG_ATH79_MACH_UWARP_SPI_8M
 static struct mtd_partition uwarp_ar7420_partitions[] = {
 	{
 		.name       = "u-boot",
 		.offset     = 0,
-		.size       = 0x020000,
+		.size       = 0x030000,
 		.mask_flags = MTD_WRITEABLE,
 	}, {
 		.name       = "kernel",
-		.offset     = 0x020000,
-		.size       = 0x160000,
+		.offset     = 0x030000,
+		.size       = 0x190000,
 	}, {
 		.name       = "rootfs",
-		.offset     = 0x180000,
-		.size       = 0x660000,
+		.offset     = 0x190000,
+		.size       = 0x650000,
 	}, {
 		.name       = "u-boot-env",
-		.offset     = 0x7f0000,
+		.offset     = 0x7F0000,
 		.size       = 0x010000,
 		.mask_flags = MTD_WRITEABLE,
 	}, {
 		.name       = "firmware",
-		.offset     = 0x020000,
-		.size       = 0x7c0000,
+		.offset     = 0x030000,
+		.size       = 0x7B0000,
 	}
 };
 static struct flash_platform_data uwarp_ar7420_flash_data = { 
@@ -90,6 +91,7 @@ static struct flash_platform_data uwarp_ar7420_flash_data = {
 };
 #else
 #error ***** WARNING ***** Neither CONFIG_ATH79_MACH_UWARP_SPI_8M or CONFIG_ATH79_MACH_UWARP_SPI_16M is defined ******
+#endif
 #endif
 
 static struct gpio_led uwarp_ar7420_leds_gpio[] __initdata = {

@@ -900,7 +900,7 @@ define Image/Build/WARP/initramfs
 		-o $(call imgname,$(1),$(2))-uImage.bin
 endef
 
-warpfw_cmdline=board=UWARP-AR7420 console=ttyS0,115200
+warpfw_cmdline=board=UWARP-AR7420 console=ttyS0,115200 panic=1 oops=panic
 define Image/Build/Profile/UWARP8MB
 	$(call Image/Build/WARP/initramfs,squashfs,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420)
 	$(call Image/Build/WARP,squashfs,uwarp-ar7420,$(warpfw_cmdline),UWARP-AR7420)

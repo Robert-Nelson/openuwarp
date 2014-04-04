@@ -170,6 +170,7 @@ CONFIG_DEFAULT_TARGET_OPTIMIZATION="-Os -pipe -mno-branch-likely -mips32r2 -mtun
 CONFIG_CPU_TYPE="34kc"
 CONFIG_LINUX_3_10=y
 CONFIG_DEFAULT_base-files=y
+CONFIG_DEFAULT_base-files-uwarp-generic=y
 CONFIG_DEFAULT_busybox=y
 CONFIG_DEFAULT_dnsmasq=y
 CONFIG_DEFAULT_dropbear=y

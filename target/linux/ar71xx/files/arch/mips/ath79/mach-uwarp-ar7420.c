@@ -47,7 +47,7 @@ static struct mtd_partition uwarp_ar7420_partitions[] = {
 		.name       = "u-boot-env",
 		.offset     = 0xFF0000,
 		.size       = 0x010000,
-		.mask_flags = MTD_WRITEABLE,
+//		.mask_flags = MTD_WRITEABLE,
 	}, {
 		.name       = "firmware",
 		.offset     = 0x030000,
@@ -78,7 +78,7 @@ static struct mtd_partition uwarp_ar7420_partitions[] = {
 		.name       = "u-boot-env",
 		.offset     = 0x7F0000,
 		.size       = 0x010000,
-		.mask_flags = MTD_WRITEABLE,
+//		.mask_flags = MTD_WRITEABLE,
 	}, {
 		.name       = "firmware",
 		.offset     = 0x030000,

@@ -9,7 +9,8 @@ define Profile/UWARP8MB
 	NAME:=UWARP8MB
 	PACKAGES:=kmod-usb-core kmod-usb-ohci kmod-usb2 kmod-ledtrig-usbdev \
 	kmod-usb-storage kmod-fs-vfat kmod-nls-cp437 \
-	kmod-nls-iso8859-1 kmod-nls-utf8 kmod-ledtrig-netdev udev
+	kmod-nls-iso8859-1 kmod-nls-utf8 kmod-ledtrig-netdev udev \
+	base-files-uwarp-generic
 	KCONFIG:= \
 		CONFIG_ATH79_MACH_UWARP_AR7420=y \
 		CONFIG_ATH79_MACH_UWARP_SPI_16M=n \
@@ -26,7 +27,8 @@ define Profile/UWARP16MB
 	NAME:=UWARP16MB
 	PACKAGES:=kmod-usb-core kmod-usb-ohci kmod-usb2 kmod-ledtrig-usbdev \
 	kmod-usb-storage kmod-fs-vfat kmod-nls-cp437 \
-	kmod-nls-iso8859-1 kmod-nls-utf8 kmod-ledtrig-netdev udev 
+	kmod-nls-iso8859-1 kmod-nls-utf8 kmod-ledtrig-netdev udev \
+	base-files-uwarp-generic
 	KCONFIG:= \
 		CONFIG_ATH79_MACH_UWARP_AR7420=y \
 		CONFIG_ATH79_MACH_UWARP_SPI_16M=y \

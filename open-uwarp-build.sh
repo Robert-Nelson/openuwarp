@@ -316,6 +316,9 @@ while [ opt3 != '' ]
 			if [ $? -ne 0 ]; then
 				sed -i "s?# CONFIG_TARGET_ar71xx_generic_UWARP8MB is not set?CONFIG_TARGET_ar71xx_generic_UWARP8MB=y?g" .config
 				sed -i "s?CONFIG_TARGET_ar71xx_generic_UWARP16MB=y?# CONFIG_TARGET_ar71xx_generic_UWARP16MB is not set?g" .config
+			fi
+			fgrep -q "CONFIG_ATH79_MACH_UWARP_SPI_8M=y" target/linux/ar71xx/config-3.10
+			if [ $? -ne 0 ]; then
 				sed -i "s?# CONFIG_ATH79_MACH_UWARP_SPI_8M is not set?CONFIG_ATH79_MACH_UWARP_SPI_8M=y?g" target/linux/ar71xx/config-3.10
 				sed -i "s?CONFIG_ATH79_MACH_UWARP_SPI_16M=y?# CONFIG_ATH79_MACH_UWARP_SPI_16M is not set?g" target/linux/ar71xx/config-3.10
 				touch target/linux/ar71xx/Makefile
@@ -333,6 +336,9 @@ while [ opt3 != '' ]
 			if [ $? -ne 0 ]; then
 				sed -i "s?# CONFIG_TARGET_ar71xx_generic_UWARP16MB is not set?CONFIG_TARGET_ar71xx_generic_UWARP16MB=y?g" .config
 				sed -i "s?CONFIG_TARGET_ar71xx_generic_UWARP8MB=y?# CONFIG_TARGET_ar71xx_generic_UWARP8MB is not set?g" .config
+			fi
+			fgrep -q "CONFIG_ATH79_MACH_UWARP_SPI_16M=y" target/linux/ar71xx/config-3.10
+			if [ $? -ne 0 ]; then
 				sed -i "s?# CONFIG_ATH79_MACH_UWARP_SPI_16M is not set?CONFIG_ATH79_MACH_UWARP_SPI_16M=y?g" target/linux/ar71xx/config-3.10
 				sed -i "s?CONFIG_ATH79_MACH_UWARP_SPI_8M=y?# CONFIG_ATH79_MACH_UWARP_SPI_8M is not set?g" target/linux/ar71xx/config-3.10
 				touch target/linux/ar71xx/Makefile

@@ -142,6 +142,9 @@ function print_success() {
 # Main
 ######################
 
+# For initial release, support only 16M boards
+SUPPORT_8MB_UWARP=1
+
 # set paths and logfile name
 set_logfile_path
 
@@ -293,6 +296,7 @@ while [ opt2 != '' ]
 	fi
 done
 
+if [ $SUPPORT_8MB_UWARP -eq 0 ]; then
 #
 # Third menu
 #
@@ -361,6 +365,9 @@ while [ opt3 != '' ]
 		esac
 	fi
 done
+fi
+
+# SUPPORT_8MB_UWARP
 fi
 
 #
